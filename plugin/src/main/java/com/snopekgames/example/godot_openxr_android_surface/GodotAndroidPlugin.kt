@@ -13,7 +13,7 @@ class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
     override fun getPluginName() = BuildConfig.GODOT_PLUGIN_NAME
 
     @UsedByGodot
-    fun updateSurface(surface: Surface?) {
+    fun updateSurface(surface: Surface?, videoPath: String) {
         if (surface == null) {
             mediaPlayer?.release()
             mediaPlayer = null
@@ -31,7 +31,7 @@ class GodotAndroidPlugin(godot: Godot) : GodotPlugin(godot) {
         }
 
         try {
-            activity.resources.openRawResourceFd(R.raw.sample_video).use { afd ->
+            activity.assets.openFd(videoPath).use { afd ->
                 mediaPlayer!!.apply {
                     setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
                     setSurface(surface)

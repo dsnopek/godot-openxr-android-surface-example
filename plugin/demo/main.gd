@@ -33,6 +33,6 @@ func _on_openxr_session_begun() -> void:
 		var android_surface = %OpenXRCompositionLayerQuad.get_android_surface()
 		if android_surface:
 			print("We have the Android surface")
-			_android_plugin.updateSurface(android_surface)
+			_android_plugin.updateSurface(android_surface, "sample_video.mp4")
 		else:
 			print("We have no Android surface")
