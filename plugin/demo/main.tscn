@@ -1,19 +1,62 @@
-[gd_scene load_steps=2 format=3 uid="uid://cg3hylang5fxn"]
+[gd_scene load_steps=8 format=3 uid="uid://cg3hylang5fxn"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_j0gfq"]
+[ext_resource type="Script" uid="uid://bkb8necafwgqs" path="res://main.gd" id="1_j0gfq"]
+[ext_resource type="Script" uid="uid://dlc4s1unw7k15" path="res://start_xr.gd" id="2_0xm2m"]
 
-[node name="Main" type="Node2D"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_0xm2m"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_h2yge"]
+sky_material = SubResource("ProceduralSkyMaterial_0xm2m")
+
+[sub_resource type="Environment" id="Environment_1bvp3"]
+background_mode = 2
+sky = SubResource("Sky_h2yge")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+albedo_color = Color(0.359069, 0.359069, 0.359069, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h2yge"]
+material = SubResource("StandardMaterial3D_0xm2m")
+size = Vector3(0.1, 0.1, 0.1)
+
+[node name="Main" type="Node3D"]
 script = ExtResource("1_j0gfq")
 
-[node name="Button" type="Button" parent="."]
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 40.0
-offset_top = 250.0
-offset_right = 320.0
-offset_bottom = 312.0
-text = "Hello World"
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1bvp3")
 
-[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+
+[node name="LeftController" type="XRController3D" parent="XROrigin3D"]
+tracker = &"left_hand"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/LeftController"]
+mesh = SubResource("BoxMesh_h2yge")
+
+[node name="RightController" type="XRController3D" parent="XROrigin3D"]
+tracker = &"right_hand"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/RightController"]
+mesh = SubResource("BoxMesh_h2yge")
+skeleton = NodePath("../../LeftController")
+
+[node name="OpenXRCompositionLayerQuad" type="OpenXRCompositionLayerQuad" parent="XROrigin3D"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.09116, -1.75425)
+use_android_surface = true
+android_surface_size = Vector2i(1280, 720)
+sort_order = -1
+enable_hole_punch = true
+quad_size = Vector2(1.7778, 1)
+
+[node name="StartXR" type="Node3D" parent="."]
+script = ExtResource("2_0xm2m")

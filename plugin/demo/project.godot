@@ -10,17 +10,31 @@ config_version=5
 
 [application]
 
-config/name="Android Plugin Demo"
+config/name="OpenXR Android Surface Example"
 run/main_scene="res://main.tscn"
-config/features=PackedStringArray("4.2", "GL Compatibility")
+config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [debug]
 
 settings/stdout/verbose_stdout=true
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GodotOpenXRAndroidSurfaceExample/plugin.cfg")
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
+vrs/mode=2
+
+[xr]
+
+openxr/enabled=true
+openxr/reference_space=2
+openxr/foveation_level=3
+openxr/foveation_dynamic=true
+shaders/enabled=true
+openxr/extensions/meta/render_model=true
